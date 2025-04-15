@@ -10129,6 +10129,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "auto-hash-map",
  "codspeed-criterion-compat",
  "data-encoding",
  "either",
