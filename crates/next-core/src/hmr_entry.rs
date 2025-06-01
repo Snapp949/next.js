@@ -3,7 +3,7 @@ use std::io::Write;
 use anyhow::Result;
 use turbo_rcstr::RcStr;
 use turbo_tasks::{ResolvedVc, ValueToString, Vc};
-use turbo_tasks_fs::{glob::Glob, rope::RopeBuilder};
+use turbo_tasks_fs::{FileSystem, VirtualFileSystem, glob::Glob, rope::RopeBuilder};
 use turbopack_core::{
     asset::{Asset, AssetContent},
     chunk::{
@@ -25,9 +25,15 @@ use turbopack_ecmascript::{
     utils::StringifyJs,
 };
 
+/// Each entry point in the HMR system has an ident with aa different nested aasset.
 #[turbo_tasks::function]
-fn modifier() -> Vc<RcStr> {
-    Vc::cell("hmr-entry".into())
+fn hmr_entry_point(entry_point: Vc<AssetIdent>) -> Vc<AssetIdent> {
+    AssetIdent::from_path(
+        VirtualFileSystem::new_with_name("hmr-entry".into())
+            .root()
+            .join("hmr-entry.js".into()),
+    )
+    .with_asset(Vc::cell("ENTRY".into()), entry_point)
 }
 
 #[turbo_tasks::value(shared)]
@@ -51,7 +57,7 @@ impl HmrEntryModule {
 impl Module for HmrEntryModule {
     #[turbo_tasks::function]
     fn ident(&self) -> Vc<AssetIdent> {
-        self.ident.with_modifier(modifier())
+        hmr_entry_point(*self.ident)
     }
 
     #[turbo_tasks::function]
