@@ -507,9 +507,7 @@ impl CssError {
             CssError::CssSelectorInModuleNotPure { selector } => {
                 ParsingIssue {
                     file,
-                    msg: ResolvedVc::cell(
-                        format!("{CSS_MODULE_ERROR}, (lightningcss, {selector})").into(),
-                    ),
+                    msg: ResolvedVc::cell(format!("{CSS_MODULE_ERROR}, ({selector})").into()),
                     source: None,
                 }
                 .resolved_cell()
