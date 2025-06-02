@@ -1,5 +1,5 @@
 use anyhow::{Context, Result, bail};
-use turbo_rcstr::rcstr;
+use turbo_rcstr::{RcStr, rcstr};
 use turbo_tasks::{ResolvedVc, Value, Vc, fxindexmap};
 use turbo_tasks_fs::FileSystemPath;
 use turbopack_core::{
@@ -108,12 +108,9 @@ impl WebAssemblyModuleAsset {
     #[turbo_tasks::function]
     async fn references(self: Vc<Self>) -> Result<Vc<ModuleReferences>> {
         Ok(Vc::cell(vec![ResolvedVc::upcast(
-            SingleChunkableModuleReference::new(
-                Vc::upcast(self.loader()),
-                Vc::cell("wasm loader".into()),
-            )
-            .to_resolved()
-            .await?,
+            SingleChunkableModuleReference::new(Vc::upcast(self.loader()), rcstr!("wasm loader"))
+                .to_resolved()
+                .await?,
         )]))
     }
 }
