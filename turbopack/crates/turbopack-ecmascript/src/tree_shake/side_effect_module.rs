@@ -84,7 +84,7 @@ impl Module for SideEffectsModule {
                     Ok(ResolvedVc::upcast(
                         SingleChunkableModuleReference::new(
                             *ResolvedVc::upcast(*side_effect),
-                            Vc::cell(("side effect")),
+                            Vc::cell(rcstr!("side effect")),
                             ExportUsage::evaluation(),
                         )
                         .to_resolved()
