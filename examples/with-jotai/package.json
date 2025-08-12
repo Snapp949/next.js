@@ -6,7 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "jotai": "2.7.1",
+    "jotai": "2.12.5",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"
